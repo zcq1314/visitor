@@ -22,7 +22,8 @@
 		<ul class="box">
 			<li class="header-left">
 				<div class="layui-logo" lay-href="/">
-					<img src="/images/logo.png" style="height:40px;margin:10px" />
+					<span style="padding: 0px 20px;font-size: 20px;letter-spacing: 5px;">访客管理系统</span>
+					<%--<img src="/images/logo.png" style="height:40px;margin:10px" />--%>
 					<span>|</span>
 					<a href="javascript:;" class="btnHeader flexible" title="侧边伸缩">
 						<i class="layui-icon layui-icon-shrink-right"></i>
@@ -77,7 +78,7 @@
 	</div>
 	<!-- 版权信息 -->
 	<div class="layui-footer">
-		<span>Copyright 2019 重庆市金坤内部运营系统 备案号：渝ICP备xxx-xxxxx号</span>
+		<span>Copyright 2019 访客管理系统 备案号：渝ICP备xxx-xxxxx号</span>
 	</div>
 </div>
 </body>
