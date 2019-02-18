@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsp.visitor.dao.FunDao">
+
+    <resultMap id="FunResult" type="Fun">
+        <id property="id" column="id"></id>
+        <id property="name" column="name"></id>
+        <id property="icon" column="icon"></id>
+        <id property="url" column="url"></id>
+        <id property="pid" column="pid"></id>
+        <id property="addTime" column="add_time"></id>
+    </resultMap>
+
+    <select id="list" parameterType="Fun" resultMap="FunResult">
+        select * from sys_fun
+        <where>
+            <if test="name!=null and name!=''">
+                and name like CONCAT('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id="all" resultMap="FunResult">
+        select * from sys_fun
+    </select>
+
+    <insert id="add" parameterType="Fun">
+        insert into sys_fun values (null,#{name},#{url},#{icon},#{pid},#{addTime})
+    </insert>
+
+    <update id="update" parameterType="Fun">
+        update sys_fun
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="url!=null and url!=''">
+                url=#{url},
+            </if>
+            <if test="icon!=null and icon!=''">
+                icon=#{icon},
+            </if>
+            <if test="pid!=null and pid!=''">
+                pid=#{pid},
+            </if>
+            <if test="addTime!=null and addTime!=''">
+                add_time=#{addTime}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from sys_fun where id=#{id}
+    </delete>
+
+</mapper> 

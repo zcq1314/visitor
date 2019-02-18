@@ -1,0 +1,55 @@
+/*顶部样式*/
+body {font-size:14px;font-family:Helvetica,Microsoft YaHei,SimSun,Arial,Tahoma;background: #e4e7ea;}
+
+.layui-header .box {height:60px;background:rgb(47, 64, 86)}
+.layui-header .box .btnHeader {display:inline-block;height:60px;padding:0px 25px;line-height:60px; color:rgba(255,255,255,0.8);text-align:center;background:rgba(0,0,0,0)}
+.layui-header .box .btnHeader:hover {color:rgba(255,255,255,1);background:rgba(0,0,0,0.3)}
+.layui-header .box .navHeader {display:inline-block;cursor:pointer}
+.layui-header .box .navHeader .layui-nav-item {vertical-align:inherit}
+.layui-header .header-left {float:left}
+.layui-header .header-right {float:right}
+/*导航样式*/
+.layui-side {top:60px;bottom:50px;width:260px;margin: 10px;border-radius: 20px;box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.13);}
+.layui-side-scroll {background:#2f4056;width:260px}
+.layui-side .layui-icon {display:inline-block;width:40px;font-size:18px;}
+.layui-nav-tree {width:100%;}
+.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a, .layui-nav-tree .layui-this>a:hover{
+    background: #007DDB;
+}
+.layui-nav-itemed>.layui-nav-child{
+    padding-left: 40px;
+}
+.layui-logo {color:rgb(255,255,255)}
+.layui-nav {border-radius:0px; background-color: #2f4056;}
+.layui-nav-tree .layui-nav-bar{background-color: #007ddb;}
+/*主体样式*/
+.layui-bodier {margin-left:260px;padding:10px 20px;}
+.layui-bodier .firstTab i {display:none}
+.tabFrame {width:100%;}
+.layui-tab-title{border-color: #2196F3;}
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar
+{
+    width: 4px;
+    height: 4px;
+    background-color: #2f4056;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #2f4056;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #007DDB;
+}
+
+/*版权信息*/
+.layui-footer {position:fixed;bottom:0px;width:100%;height:40px;line-height:40px;background:rgb(47, 64, 86);color:rgb(200, 214, 219);border-top:1px rgb(242,242,242) solid;text-align:center}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsp.visitor.dao.RoleDao">
+
+    <resultMap id="RoleResult" type="Role">
+        <id property="id" column="id"></id>
+        <id property="name" column="name"></id>
+        <id property="funs" column="funs"></id>
+        <id property="remark" column="remark"></id>
+        <id property="addTime" column="add_time"></id>
+    </resultMap>
+
+    <select id="findById" parameterType="Integer" resultMap="RoleResult">
+        select * from sys_role where id=#{id}
+    </select>
+
+    <select id="list" parameterType="Role" resultMap="RoleResult">
+        select * from sys_role
+        <where>
+            <if test="name!=null and name!=''">
+                name like CONCAT('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="Role">
+        insert into sys_role values (null,#{name},#{funs},#{remark},#{addTime})
+    </insert>
+
+    <update id="update" parameterType="Role">
+        update sys_role
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="funs!=null and funs!=''">
+                funs=#{funs},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from sys_role where id=#{id}
+    </delete>
+
+</mapper> 

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/login.css">
+	<!--<script src="js/jquery-1.10.2.js"></script>-->
+</head>
+<body>
+<header>
+	<nav class="b_clear">
+		<div class="nav_logo l_float">
+			<img src="images/logo.png" alt="">
+		</div>
+		<div class="nav_link r_float">
+			<ul>
+				<li><a href="#">金坤车联网内部运营系统</a></li>
+			</ul>
+		</div>
+	</nav>
+</header>
+<div class="container">
+	<div class="login_body l_clear">
+
+		<div class="login_ad l_float" id="AdImg">
+			<!--<a href="">查看详情</a>-->
+		</div>
+		<div class="login_form l_float">
+			<div class="login_top">
+				<div class="login_tags b_clear">
+					<span class="top_tag l_float active">用 户 登 录</span>
+				</div>
+			</div>
+			<div class="login_con">
+				<form  class="layui-form">
+					<div>
+						<label for="user_name">用户名</label>
+						<input type="text" name="userName" id="user_name" placeholder="账号/手机号/邮箱">
+						<img src="images/icons/user.svg">
+						<p class="tips hidden">请检查您的账号</p>
+					</div>
+					<div>
+						<label for="user_pwd">密码</label>
+						<input type="password" name="password" id="user_pwd" placeholder="请输入账户密码">
+						<img src="images/icons/lock.svg">
+						<p class="tips hidden">请检查您的密码</p>
+					</div>
+					<div id="imgVer"></div>
+					<div class="b_clear submit">
+						<button type="submit" lay-submit lay-filter="submit">登&nbsp;&nbsp;录</button>
+						<p class="tips hidden">登录失败，请检查您的账户与密码</p>
+					</div>
+				</form>
+			</div>
+			<!-- <div class="b_clear">
+                        <label for="auth_code" class="b_clear"  style="margin-bottom: 10px;">验证码</label>
+                        <input type="text" name="" id="auth_code" placeholder="" class="l_float" maxlength="6">
+
+                        <button class="auth_code l_float">获取验证码</button>
+                        <img src="images/icons/auth_code.svg">
+                        <p class="tips hidden">验证码错误</p>
+                    </div> -->
+			<div class="login_otherAccount">
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<p>Copyright © 2018-2019  <a href="#">重庆金坤实业(集团)有限公司</a></p>
+		<!-- <a href="http://www.beian.gov.cn/" target="_blank"><img src="images/icons/national_emblem.svg" alt="公安部备案">蒙公网安备15020302000160号</a> -->
+		<a href="#" target="_blank"><img src="images/icons/icp_record_filing.svg" alt="工信部备案">渝ICP备xxxxxxxx号</a>
+	</div>
+</div>
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="js/login.js"></script>
+<script>
+	layui.use('form', function(){
+		var form = layui.form;
+		var $ = layui.jquery;
+		var flag = false;
+		imgVer({
+			el:'$("#imgVer")',
+			width:'210',
+			height:'100',
+			img:[
+				'images/ver.png',
+				'images/ver5.jpg',
+				'images/ver5.jpg'
+				/*'images/ver-2.png',
+				'images/ver-3.png'*/
+			],
+			success:function () {
+				//alert('执行登录函数');
+				//$(".tips").html('你是不是不知道账号密码！？？？');
+				//$("#logo").attr("src",'images/login-err.png')
+				flag = true;
+			},
+			error:function () {
+				//alert('错误什么都不执行')
+			}
+		});
+		//监听提交
+		form.on('submit(submit)',function(data){
+
+			if(!isNull()){
+				return false;
+			}
+			if(!flag){
+				layer.msg('请先滑动验证!',{icon: 2});
+				return false;
+			}
+			$.ajax({
+				url:'/user/login',
+				type:'post',
+				data:data.field,
+				dataType:"json",
+				beforeSend:function(){
+					//do something
+				},
+				success:function(data){
+					//do something
+					if(data.code===0){
+						location.href="/page/main";
+					} else {
+						layer.msg(data.msg,{icon: 2});
+						//$('.tips').text(data.msg);
+					}
+				},
+				error:function(data){
+					//do something
+					layer.msg('与服务器连接失败',{icon: 2});
+				}
+			});
+			return false;
+		});
+	});
+</script>
+</body>
+</html>
