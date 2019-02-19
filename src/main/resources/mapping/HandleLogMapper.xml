@@ -7,12 +7,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap id="LogResult" type="HandleLog">
         <id property="id" column="id"></id>
         <id property="userId" column="user_id"></id>
-        <id property="userName" column="user_name"></id>
-        <id property="opMethod" column="op_method"></id>
-        <id property="opModule" column="op_module"></id>
-        <id property="opType" column="op_type"></id>
-        <id property="opContent" column="op_content"></id>
-        <id property="addTime" column="add_time"></id>
+        <result property="userName" column="user_name"></result>
+        <result property="opMethod" column="op_method"></result>
+        <result property="opModule" column="op_module"></result>
+        <result property="opType" column="op_type"></result>
+        <result property="opContent" column="op_content"></result>
+        <result property="addTime" column="add_time"></result>
     </resultMap>
 
     <select id="list" parameterType="HandleLog" resultMap="LogResult">

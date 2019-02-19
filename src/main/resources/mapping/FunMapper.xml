@@ -6,11 +6,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap id="FunResult" type="Fun">
         <id property="id" column="id"></id>
-        <id property="name" column="name"></id>
-        <id property="icon" column="icon"></id>
-        <id property="url" column="url"></id>
-        <id property="pid" column="pid"></id>
-        <id property="addTime" column="add_time"></id>
+        <result property="name" column="name"></result>
+        <result property="icon" column="icon"></result>
+        <result property="url" column="url"></result>
+        <result property="pid" column="pid"></result>
+        <result property="addTime" column="add_time"></result>
     </resultMap>
 
     <select id="list" parameterType="Fun" resultMap="FunResult">

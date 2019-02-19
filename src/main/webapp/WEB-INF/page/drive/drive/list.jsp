@@ -23,17 +23,13 @@
 <div>
     <form class="layui-form">
         <div class="layui-form-item layui-elem-quote">
-            <label class="layui-form-label">姓名</label>
+            <label class="layui-form-label">设备名称</label>
             <div class="layui-input-inline">
                 <input type="text" name="name" id="name"
-                       autocomplete="off" placeholder="姓名" class="layui-input">
+                       autocomplete="off" placeholder="设备名称" class="layui-input">
             </div>
             <button type="button" class="layui-btn btnSearch" lay-filter="search" lay-submit="">查询</button>
-            <button type="button" class="layui-btn layui-btn-normal btnAdd">+ 新增访客</button>
-        </div>
-        <div class="layui-form-item">
-            <button type="button" class="layui-btn layui-btn-sm" id="import">导 入</button>
-            <button type="button" class="layui-btn layui-btn-sm  layui-btn-normal" id="export">导 出</button>
+            <button type="button" class="layui-btn layui-btn-normal btnAdd">+ 新增设备</button>
         </div>
     </form>
     <table class="layui-hide" id="tableList" lay-filter="tableList1"></table>
@@ -41,7 +37,7 @@
 </body>
 <script src="/layui/layui.js" charset="utf-8"></script>
 <script type="text/html" id="switchTpl">
-    <input type="checkbox" name="type" value="{{d.id}}" lay-skin="switch" lay-text="正常|黑名单" lay-filter="type" {{ d.type === 1 ? 'checked' : '' }}>
+    <input type="checkbox" name="type" value="{{d.id}}" lay-skin="switch" lay-text="启动|停用" lay-filter="type" {{ d.type === 0 ? 'checked' : '' }}>
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -56,22 +52,16 @@
         //加载表格
         table.render({
             elem: '#tableList',
-            url: '/visitor/list',
+            url: '/drive/list',
             method:'post',
             cols: [[
-                {field:'name', title: '姓名', align:'center'},
-                {field:'sex', title: '性别', align:'center', templet:function (d) {
-                    if(d.sex === 1){
-                        return "男";
-                    }else{
-                        return "女";
-                    }
-                }},
-                {field:'phone', title: '联系方式', align:'center'},
-                {field:'address', title: '联系地址', align:'center'},
-                {field:'remark', title: '备注', align:'center'},
-                {field:'type', title: '类型', align:'center',templet:'#switchTpl'},
-                {field:'time', title: '登记时间', align:'center'},
+                {field:'name', title: '设备名称', align:'center'},
+                {field:'account', title: '设备编号', align:'center'},
+                {field:'address', title: '登记点', align:'center',templet:function (d) {
+                        return d.address.address;
+                    }},
+                {field:'type', title: '状态', align:'center',templet:'#switchTpl'},
+                {field:'addTime', title: '创建时间', align:'center'},
                 {fixed: 'right', width:260, title: '操作', align:'center', toolbar: '#barDemo'}
             ]],
             page:true
@@ -92,12 +82,12 @@
         form.on('switch(type)', function(obj){
             var type;
             if(obj.elem.checked){
-                type = 1;
+                type = 0;
             }else{
-                type = 2;
+                type = 1;
             }
             $.ajax({
-                url:'/visitor/save',
+                url:'/drive/save',
                 type:'post',
                 data:{id:this.value,'type':type},
                 dataType:"json",
@@ -109,7 +99,6 @@
                     } else {
                         layer.alert(data.msg,{icon:2});
                     }
-                    layer.close(index);
                     layui.table.reload('tableList');
                 },
                 error:function(data){//do something
@@ -123,7 +112,7 @@
         table.on('tool(tableList1)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                layer.confirm('姓名：'+data.name, {icon: 3, title:'是否确定删除?'}, function(index){
+                layer.confirm('设备名称：'+data.name, {icon: 3, title:'是否确定删除?'}, function(index){
                     $.ajax({
                         url:'/visitor/delete',
                         type:'post',
@@ -147,7 +136,7 @@
                 });
             } else if(obj.event === 'edit'){
                 layer.open({
-                    title: '编辑访客',
+                    title: '编辑设备',
                     type: 2,
                     shade: false,
                     area: ['736px', '460px'],
@@ -155,7 +144,7 @@
                     btnAlign: 'c',
                     anim: 0,
                     shade: [0.5, 'rgb(0,0,0)'],
-                    content: '/page/visitor/edit',
+                    content: '/page/drive/drive/edit',
                     zIndex: layer.zIndex, //重点1
                     success: function(layero,index){
                         // 获取子页面的iframe
@@ -171,7 +160,7 @@
         });
         $('.btnAdd').on('click',function(){
             layer.open({
-                title: '新增访客',
+                title: '新增设备名',
                 type: 2,
                 shade: false,
                 area: ['736px', '460px'],
@@ -179,7 +168,7 @@
                 btnAlign: 'c',
                 anim: 0,
                 shade: [0.5, 'rgb(0,0,0)'],
-                content: '/page/visitor/add',
+                content: '/page/drive/drive/add',
                 zIndex: layer.zIndex, //重点1
                 success: function(layero){
                     //layer.setTop(layero); //顶置窗口

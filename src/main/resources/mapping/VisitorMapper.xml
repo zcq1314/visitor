@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dsp.visitor.dao.VisitorDao">
+    <resultMap id="VisitorResult" type="Visitor">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="sex" column="sex"></result>
+        <result property="phone" column="phone"></result>
+        <result property="address" column="address"></result>
+        <result property="remark" column="remark"></result>
+        <result property="type" column="type"></result>
+        <result property="time" column="time"></result>
+    </resultMap>
+
+    <select id="list" parameterType="java.lang.Integer" resultMap="VisitorResult">
+        select * from visitor
+        <where>
+            <if test="name!=null and name!=''">
+                and name like CONCAT('%',#{name},'%')
+            </if>
+            <if test="type!=null and type!=''">
+                and type = #{type}
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="Visitor">
+        insert into visitor values (null,#{name},#{sex},#{phone},#{address},#{remark},#{type},#{time})
+    </insert>
+
+    <insert id="batchSave" parameterType="java.util.List">
+        insert into visitor
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (null,#{item.name},#{item.sex},#{item.phone},#{item.address},#{item.remark},#{item.type},#{item.time})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="Visitor">
+        update visitor
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="sex!=null and sex!=''">
+                sex=#{sex},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="address!=null and address!=''">
+                address=#{address},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="type!=null and type!=''">
+                type=#{type},
+            </if>
+            <if test="time!=null and time!=''">
+                time=#{time}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from visitor where id=#{id}
+    </delete>
+</mapper> 

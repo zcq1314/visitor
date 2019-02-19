@@ -184,6 +184,17 @@
       <version>1.2.47</version>
     </dependency>
 
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.andyczy</groupId>
+      <artifactId>java-excel-utils</artifactId>
+      <version>4.0</version>
+    </dependency>
 
     <!-- 引入PageHelper分页插件 -->
     <dependency>

@@ -18,7 +18,7 @@ public class Result {
         this.setMsg(msg);
     }
 
-    public void setError(String string) {
+    public void setError(String msg) {
         this.setCode(1);
         this.setMsg(msg);
     }

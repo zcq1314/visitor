@@ -10,6 +10,7 @@ import com.dsp.visitor.entity.Result;
 import com.dsp.visitor.entity.Role;
 import com.dsp.visitor.entity.User;
 import com.dsp.visitor.services.UserServiceImpl;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
+
 
     @Autowired
     private UserServiceImpl userService;
@@ -51,7 +53,7 @@ public class UserController {
         if(resultUser==null){
             result.setError("用户不存在！");
         }else{
-            if(resultUser.getPassword().equals(user.getPassword())){
+            if(!(resultUser.getPassword().equals(user.getPassword()))){
                 result.setError("密码错误！");
             }else{
                 result.setSuccess("登录成功！");

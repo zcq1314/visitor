@@ -6,10 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap id="LogResult" type="LoginLog">
         <id property="id" column="id"></id>
-        <id property="name" column="name"></id>
-        <id property="ip" column="ip"></id>
-        <id property="browser" column="browser"></id>
-        <id property="time" column="time"></id>
+        <result property="name" column="name"></result>
+        <result property="ip" column="ip"></result>
+        <result property="browser" column="browser"></result>
+        <result property="time" column="time"></result>
     </resultMap>
 
     <select id="list" parameterType="LoginLog" resultMap="LogResult">

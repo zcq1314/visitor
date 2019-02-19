@@ -23,26 +23,19 @@
 <div>
     <form class="layui-form">
         <div class="layui-form-item layui-elem-quote">
-            <label class="layui-form-label">姓名</label>
+            <label class="layui-form-label">登记点</label>
             <div class="layui-input-inline">
-                <input type="text" name="name" id="name"
-                       autocomplete="off" placeholder="姓名" class="layui-input">
+                <input type="text" name="address" id="address"
+                       autocomplete="off" placeholder="登记点" class="layui-input">
             </div>
             <button type="button" class="layui-btn btnSearch" lay-filter="search" lay-submit="">查询</button>
-            <button type="button" class="layui-btn layui-btn-normal btnAdd">+ 新增访客</button>
-        </div>
-        <div class="layui-form-item">
-            <button type="button" class="layui-btn layui-btn-sm" id="import">导 入</button>
-            <button type="button" class="layui-btn layui-btn-sm  layui-btn-normal" id="export">导 出</button>
+            <button type="button" class="layui-btn layui-btn-normal btnAdd">+ 新增登记点</button>
         </div>
     </form>
     <table class="layui-hide" id="tableList" lay-filter="tableList1"></table>
 </div>
 </body>
 <script src="/layui/layui.js" charset="utf-8"></script>
-<script type="text/html" id="switchTpl">
-    <input type="checkbox" name="type" value="{{d.id}}" lay-skin="switch" lay-text="正常|黑名单" lay-filter="type" {{ d.type === 1 ? 'checked' : '' }}>
-</script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -56,22 +49,12 @@
         //加载表格
         table.render({
             elem: '#tableList',
-            url: '/visitor/list',
+            url: '/address/list',
             method:'post',
             cols: [[
-                {field:'name', title: '姓名', align:'center'},
-                {field:'sex', title: '性别', align:'center', templet:function (d) {
-                    if(d.sex === 1){
-                        return "男";
-                    }else{
-                        return "女";
-                    }
-                }},
-                {field:'phone', title: '联系方式', align:'center'},
-                {field:'address', title: '联系地址', align:'center'},
+                {field:'address', title: '登记点', align:'center'},
                 {field:'remark', title: '备注', align:'center'},
-                {field:'type', title: '类型', align:'center',templet:'#switchTpl'},
-                {field:'time', title: '登记时间', align:'center'},
+                {field:'addTime', title: '创建时间', align:'center'},
                 {fixed: 'right', width:260, title: '操作', align:'center', toolbar: '#barDemo'}
             ]],
             page:true
@@ -83,49 +66,18 @@
                     curr: 1 //重新从第 1 页开始
                 },
                 where: {
-                    'name': $('#name').val(),
+                    'address': $('#address').val(),
                 }
             });
-        });
-
-        //监听性别操作
-        form.on('switch(type)', function(obj){
-            var type;
-            if(obj.elem.checked){
-                type = 1;
-            }else{
-                type = 2;
-            }
-            $.ajax({
-                url:'/visitor/save',
-                type:'post',
-                data:{id:this.value,'type':type},
-                dataType:"json",
-                beforeSend:function(){//console.log(JSON.stringify(data.field));
-                },
-                success:function(data){//do something
-                    if(data.code==0){
-                        layer.msg('修改成功',{icon:1});
-                    } else {
-                        layer.alert(data.msg,{icon:2});
-                    }
-                    layer.close(index);
-                    layui.table.reload('tableList');
-                },
-                error:function(data){//do something
-                    layer.msg('与服务器连接失败',{icon: 2});
-                }
-            });
-            //alert(this.value+" "+this.name+" "+);
         });
 
         //监听工具条
         table.on('tool(tableList1)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                layer.confirm('姓名：'+data.name, {icon: 3, title:'是否确定删除?'}, function(index){
+                layer.confirm('登记点：'+data.address, {icon: 3, title:'是否确定删除?'}, function(index){
                     $.ajax({
-                        url:'/visitor/delete',
+                        url:'/address/delete',
                         type:'post',
                         data:{'id':data.id},
                         dataType:"json",
@@ -147,15 +99,15 @@
                 });
             } else if(obj.event === 'edit'){
                 layer.open({
-                    title: '编辑访客',
+                    title: '编辑登记点',
                     type: 2,
                     shade: false,
-                    area: ['736px', '460px'],
+                    area: ['500px', '350px'],
                     maxmin: true,
                     btnAlign: 'c',
                     anim: 0,
                     shade: [0.5, 'rgb(0,0,0)'],
-                    content: '/page/visitor/edit',
+                    content: '/page/drive/address/edit',
                     zIndex: layer.zIndex, //重点1
                     success: function(layero,index){
                         // 获取子页面的iframe
@@ -171,15 +123,15 @@
         });
         $('.btnAdd').on('click',function(){
             layer.open({
-                title: '新增访客',
+                title: '新增登记点',
                 type: 2,
                 shade: false,
-                area: ['736px', '460px'],
+                area: ['500px', '350px'],
                 maxmin: true,
                 btnAlign: 'c',
                 anim: 0,
                 shade: [0.5, 'rgb(0,0,0)'],
-                content: '/page/visitor/add',
+                content: '/page/drive/address/add',
                 zIndex: layer.zIndex, //重点1
                 success: function(layero){
                     //layer.setTop(layero); //顶置窗口
@@ -188,35 +140,6 @@
                     //确认按钮
                 }
             });
-        });
-        var upload = layui.upload;
-
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#import' //绑定元素
-            ,url: '/visitor/import' //上传接口
-            ,accept: 'file' //允许上传的文件类型
-            ,done: function(res){
-                //上传完毕回调
-            }
-            ,error: function(){
-                //请求异常回调
-            }
-        });
-
-        $('#export').on('click',function(){
-
-            var index = layer.msg('导出中', {
-                icon: 16
-                ,shade: false
-            });
-            location.href="/visitor/export";
-
-            layer.alert("导出成功",{icon:1});
-            layer.close(index);
-            //var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-
-            //layer.close(index);
         });
     })
 </script>

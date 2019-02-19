@@ -1,18 +1,19 @@
 package com.dsp.visitor.controller;
 
-import com.dsp.visitor.entity.LoginLog;
-import com.dsp.visitor.entity.Result;
-import com.dsp.visitor.entity.Role;
-import com.dsp.visitor.entity.User;
+import com.dsp.visitor.entity.*;
 import com.dsp.visitor.services.LogServiceImpl;
 import com.dsp.visitor.services.UserServiceImpl;
+import com.dsp.visitor.services.VisitorServiceImpl;
 import com.dsp.visitor.utils.HttpUtil;
+import com.dsp.visitor.utils.ReflexUtils;
+import com.github.andyczy.java.excel.ExcelUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,28 +28,24 @@ import java.util.List;
 public class VisitorController {
 
     @Autowired
-    private UserServiceImpl userService;
-
-    @Autowired
-    private LogServiceImpl logService;
+    private VisitorServiceImpl visitorService;
 
     /**
      * 查询所有访客信息
      * @param page
      * @param limit
-     * @param s_user
+     * @param visitor
      * @param response
      * @return
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Result list(Integer page, Integer limit , User s_user,
+    public Result list(Integer page, Integer limit , Visitor visitor,
                        HttpServletResponse response)throws Exception{
 
-
         PageHelper.startPage(page,limit);
-        List<User> customerList = userService.list(s_user);
-        PageInfo<User> pageInfo = new PageInfo<>(customerList);
+        List<Visitor> visitors = visitorService.list(visitor);
+        PageInfo<Visitor> pageInfo = new PageInfo<>(visitors);
 
         Result result = new Result();
 
@@ -65,52 +62,23 @@ public class VisitorController {
     }
 
     /**
-     * 查询所有用户
-     * @param s_user
-     * @param response
-     * @return
-     */
-    @RequestMapping(value = "/findAll")
-    @ResponseBody
-    public Result list(User s_user, HttpServletResponse response)throws Exception{
-
-
-        List<User> customerList = userService.list(s_user);
-
-        Result result = new Result();
-
-        result.setSuccess("获取成功");
-        result.setData(customerList);
-        result.setCount(customerList.size());
-
-        return result;
-    }
-
-    /**
-     * 添加或修改用户
-     * @param s_user
+     * 添加或修改访客
+     * @param visitor
      * @param request
      * @param response
      * @return
      */
     @RequestMapping(value = "/save")
     @ResponseBody
-    public Result save(User s_user, HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public Result save(Visitor visitor, HttpServletRequest request, HttpServletResponse response)throws Exception{
 
         Result result = new Result();
         int resultTotal = 0;
-        if(s_user.getId()==null){
-            s_user.setAddTime(new Date());
-            resultTotal=userService.add(s_user);
+        if(visitor.getId()==null){
+            visitor.setTime(new Date());
+            resultTotal = visitorService.add(visitor);
         }else{
-            resultTotal=userService.update(s_user);
-
-            User sesUser = (User) request.getSession().getAttribute("userInfo");
-
-            if(s_user.getId().equals(sesUser.getId())){
-                request.getSession().setAttribute("userInfo",s_user);
-            }
-
+            resultTotal = visitorService.update(visitor);
         }
 
         if(resultTotal>0){
@@ -121,43 +89,9 @@ public class VisitorController {
 
         return result;
     }
-
+    
     /**
-     * 修改密码
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping(value = "/updatePwd")
-    @ResponseBody
-    public Result updatePwd(HttpServletRequest request, HttpServletResponse response)throws Exception{
-
-
-        User resultUser = (User) request.getSession().getAttribute("userInfo");
-
-        String password = resultUser.getPassword();
-
-        String password1 = request.getParameter("password1");
-
-
-        Result result = new Result();
-
-        if(!(password.equals(password1))){
-            result.setError("原密码不正确");
-        }else{
-            password = request.getParameter("password3");
-            resultUser.setPassword(password);
-            userService.update(resultUser);
-            result.setSuccess("成功");
-        }
-
-        return result;
-
-
-    }
-
-    /**
-     * 删除用户
+     * 删除访客
      * @param id
      * @param response
      * @return
@@ -167,7 +101,7 @@ public class VisitorController {
     @ResponseBody
     public Result delete(Integer id, HttpServletResponse response)throws Exception{
 
-        Integer num = userService.delete(id);
+        Integer num = visitorService.delete(id);
 
         Result result = new Result();
 
@@ -180,41 +114,36 @@ public class VisitorController {
         return result;
     }
 
-    /**
-     * 修改用户密码
-     * @param s_user
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/modifyPassword")
-    @ResponseBody
-    public Result modifyPassword(User s_user,HttpServletResponse response) throws Exception{
 
-        int resultTotal = userService.update(s_user);
+    @RequestMapping(value = "/export")
+    public void export(HttpServletResponse response){
 
-        Result result = new Result();
+        List<Visitor> visitors = visitorService.list(null);
+        ExcelUtils excelUtils = ExcelUtils.initialization();
 
-        if(resultTotal>0){
-            result.setSuccess("成功");
-        }else{
-            result.setError("失败");
-        }
+        String[] headers = new String[]{"编号","姓名","性别(1为男生,2为女生)","联系方式","联系地址","备注","类型(1为正常,2为黑名单)","时间"};
+        // 必填项--导出数据（参数请看下面的格式）
+        excelUtils.setDataLists(ReflexUtils.exportSet(visitors,headers));
+        // 必填项--sheet名称（如果是多表格导出、sheetName也要是多个值！）
+        excelUtils.setSheetName(new String[]{"sheet1"});
+        // 文件名称(可为空，默认是：sheet 第一个名称)
+        //excelUtils.setFileName(excelName);
 
-        return result;
+        // web项目response响应输出流：必须填、有本地测试方法:ExcelUtils.testLocalNoStyleNoResponse()、输出地址为本地！
+        excelUtils.setResponse(response);
+
+        //执行导出
+        excelUtils.exportForExcelsNoStyle();
     }
 
-    /**
-     * 退出登录
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/logout")
-    @ResponseBody
-    public Result logout(HttpSession session){
-        session.invalidate();
-        Result result = new Result();
-        result.setSuccess("成功");
-        return result;
+    @RequestMapping(value = "/import")
+    public void importExcel(MultipartFile file) {
+
+        List<Visitor> visitors = ReflexUtils.execlToList(Visitor.class,file);
+
+        visitorService.batchSave(visitors);
+
+        System.out.println("____________");
     }
+    
 }

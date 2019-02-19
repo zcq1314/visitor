@@ -31,10 +31,6 @@
             <button type="button" class="layui-btn btnSearch" lay-filter="search" lay-submit="">查询</button>
             <button type="button" class="layui-btn layui-btn-normal btnAdd">+ 新增用户</button>
         </div>
-        <div class="layui-form-item">
-            <button type="button" class="layui-btn layui-btn-sm" id="import">导 入</button>
-            <button type="button" class="layui-btn layui-btn-sm  layui-btn-normal" id="export">导 出</button>
-        </div>
     </form>
     <table class="layui-hide" id="tableList" lay-filter="tableList1"></table>
 </div>
@@ -45,7 +41,7 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
-    layui.use(["table","upload"],function(){
+    layui.use("table",function(){
         var table = layui.table;
         var $ = layui.jquery;
 
@@ -146,35 +142,6 @@
                     //确认按钮
                 }
             });
-        });
-        var upload = layui.upload;
-
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#import' //绑定元素
-            ,url: '/user/import' //上传接口
-            ,accept: 'file' //允许上传的文件类型
-            ,done: function(res){
-                //上传完毕回调
-            }
-            ,error: function(){
-                //请求异常回调
-            }
-        });
-
-        $('#export').on('click',function(){
-
-            var index = layer.msg('导出中', {
-                icon: 16
-                ,shade: false
-            });
-            location.href="/user/export";
-
-            layer.alert("导出成功",{icon:1});
-            layer.close(index);
-            //var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-
-            //layer.close(index);
         });
     })
 </script>

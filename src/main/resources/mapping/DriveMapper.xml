@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsp.visitor.dao.DriveDao">
+
+    <resultMap id="DriveResult" type="Drive">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="account" column="account"></result>
+        <result property="type" column="type"></result>
+        <result property="addTime" column="add_time"></result>
+        <result property="siteId" column="site_id"></result>
+        <association property="address" column="site_id" select="com.dsp.visitor.dao.AddressDao.findById"></association>
+    </resultMap>
+
+    <select id="list" parameterType="Drive" resultMap="DriveResult">
+        select * from drive
+        <where>
+            <if test="name!=null and name!=''">
+                name like CONCAT('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="Drive">
+        insert into drive values (null,#{name},#{account},#{siteId},#{type},#{addTime})
+    </insert>
+
+    <update id="update" parameterType="Drive">
+        update drive
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="account!=null and account!=''">
+                account=#{account},
+            </if>
+            <if test="siteId!=null and siteId!=''">
+                site_id=#{siteId},
+            </if>
+            <if test="type!=null">
+                type=#{type}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from drive where id=#{id}
+    </delete>
+
+</mapper> 

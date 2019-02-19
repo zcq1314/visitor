@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsp.visitor.dao.AddressDao">
+
+    <resultMap id="AddressResult" type="Address">
+        <id property="id" column="id"></id>
+        <result property="address" column="address"></result>
+        <result property="remark" column="remark"></result>
+        <result property="addTime" column="add_time"></result>
+    </resultMap>
+
+    <select id="findById" parameterType="Integer" resultMap="AddressResult">
+        select * from address where id=#{id}
+    </select>
+
+    <select id="list" parameterType="Address" resultMap="AddressResult">
+        select * from address
+        <where>
+            <if test="address!=null and address!=''">
+                address like CONCAT('%',#{address},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="Address">
+        insert into address values (null,#{address},#{remark},#{addTime})
+    </insert>
+
+    <update id="update" parameterType="Address">
+        update address
+        <set>
+            <if test="address!=null and address!=''">
+                address=#{address},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from address where id=#{id}
+    </delete>
+
+</mapper> 
