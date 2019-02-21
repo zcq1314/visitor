@@ -94,7 +94,7 @@
         form.on('submit(submit)',function(formData){
 
             $.ajax({
-                url:'/visitor/save',
+                url:'/vis/save',
                 type:'post',
                 data:formData.field,
                 dataType:"json",

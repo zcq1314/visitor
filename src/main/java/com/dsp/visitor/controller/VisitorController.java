@@ -1,10 +1,7 @@
 package com.dsp.visitor.controller;
 
 import com.dsp.visitor.entity.*;
-import com.dsp.visitor.services.LogServiceImpl;
-import com.dsp.visitor.services.UserServiceImpl;
 import com.dsp.visitor.services.VisitorServiceImpl;
-import com.dsp.visitor.utils.HttpUtil;
 import com.dsp.visitor.utils.ReflexUtils;
 import com.github.andyczy.java.excel.ExcelUtils;
 import com.github.pagehelper.PageHelper;
@@ -17,13 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/visitor")
+@RequestMapping(value = "/vis")
 public class VisitorController {
 
     @Autowired

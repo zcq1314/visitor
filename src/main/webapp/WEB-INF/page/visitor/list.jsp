@@ -56,7 +56,7 @@
         //加载表格
         table.render({
             elem: '#tableList',
-            url: '/visitor/list',
+            url: '/vis/list',
             method:'post',
             cols: [[
                 {field:'name', title: '姓名', align:'center'},
@@ -97,7 +97,7 @@
                 type = 2;
             }
             $.ajax({
-                url:'/visitor/save',
+                url:'/vis/save',
                 type:'post',
                 data:{id:this.value,'type':type},
                 dataType:"json",
@@ -125,7 +125,7 @@
             if(obj.event === 'del'){
                 layer.confirm('姓名：'+data.name, {icon: 3, title:'是否确定删除?'}, function(index){
                     $.ajax({
-                        url:'/visitor/delete',
+                        url:'/vis/delete',
                         type:'post',
                         data:{'id':data.id},
                         dataType:"json",
@@ -194,7 +194,7 @@
         //执行实例
         var uploadInst = upload.render({
             elem: '#import' //绑定元素
-            ,url: '/visitor/import' //上传接口
+            ,url: '/vis/import' //上传接口
             ,accept: 'file' //允许上传的文件类型
             ,done: function(res){
                 //上传完毕回调
@@ -210,7 +210,7 @@
                 icon: 16
                 ,shade: false
             });
-            location.href="/visitor/export";
+            location.href="/vis/export";
 
             layer.alert("导出成功",{icon:1});
             layer.close(index);

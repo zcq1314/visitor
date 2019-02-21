@@ -47,7 +47,7 @@
         //加载表格
         table.render({
             elem: '#tableList',
-            url: '/visitor/list',
+            url: '/vis/list',
             method:'post',
             cols: [[
                 {field:'name', title: '姓名', align:'center'},
@@ -90,7 +90,7 @@
                 type = 2;
             }
             $.ajax({
-                url:'/visitor/save',
+                url:'/vis/save',
                 type:'post',
                 data:{id:this.value,'type':type},
                 dataType:"json",

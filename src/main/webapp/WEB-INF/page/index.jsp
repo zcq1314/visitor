@@ -78,7 +78,7 @@
 		//加载表格
 		table.render({
 			elem: '#tableList',
-			url: '/visitor/todaylist',
+			url: '/vis/todaylist',
 			method: 'post',
 			cols: [[
 				{field: 'name', title: '姓名', align: 'center'},
