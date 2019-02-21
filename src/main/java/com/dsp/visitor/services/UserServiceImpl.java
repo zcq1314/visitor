@@ -36,7 +36,7 @@ public class UserServiceImpl{
     }
 
 
-    @Describe(opModule = "角色模块",opType = 1,opContent = "新增的用户为：【#{#user.trueName}】")
+    @Describe(opModule = "用户模块",opType = 1,opContent = "新增的用户为：【#{#user.trueName}】")
     public Integer add(User user) {
         return userDao.add(user);
     }
@@ -46,7 +46,7 @@ public class UserServiceImpl{
         return userDao.update(user);
     }
 
-    @Describe(opModule = "用户模块",opType = 1,opContent = "删除的用户编号为：【#{#id}】")
+    @Describe(opModule = "用户模块",opType = 3,opContent = "删除的用户编号为：【#{#id}】")
     public Integer delete(Integer id) {
         return userDao.delete(id);
     }

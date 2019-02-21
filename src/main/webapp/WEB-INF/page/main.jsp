@@ -55,7 +55,7 @@
 	<!-- 侧边菜单 -->
 	<div class="layui-side">
 		<div class="layui-side-scroll">
-			<div class="layui-logo" lay-href="/vn/page/index" style="padding: 20px;text-align: center">
+			<div class="layui-logo" lay-href="/page/index" style="padding: 20px;text-align: center">
 				<span>控制台</span>
 			</div>
 			<ul class="layui-nav layui-nav-tree layui-bg-cyan" lay-filter="nav" id="menu">

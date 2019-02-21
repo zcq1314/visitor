@@ -16,7 +16,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="list" parameterType="HandleLog" resultMap="LogResult">
-        select * from log_handle order by add_time desc
+        select * from log_handle
+        <where>
+            <if test="begintime!=null and begintime!=''">
+                and add_time &gt;= #{begintime}
+            </if>
+            <if test="endtime!=null and endtime!=''">
+                and add_time &lt;= #{endtime}
+            </if>
+        </where>
+        order by add_time desc
     </select>
 
 

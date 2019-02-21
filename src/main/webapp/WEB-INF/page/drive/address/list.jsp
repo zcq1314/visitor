@@ -66,7 +66,7 @@
                     curr: 1 //重新从第 1 页开始
                 },
                 where: {
-                    'address': $('#address').val(),
+                    'address': $('#address').val()
                 }
             });
         });

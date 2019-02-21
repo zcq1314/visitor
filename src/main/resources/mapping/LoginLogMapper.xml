@@ -13,7 +13,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="list" parameterType="LoginLog" resultMap="LogResult">
-        select * from log_login order by time desc
+        select * from log_login
+        <where>
+            <if test="begintime!=null and begintime!=''">
+                and time &gt;= #{begintime}
+            </if>
+            <if test="endtime!=null and endtime!=''">
+                and time &lt;= #{endtime}
+            </if>
+        </where>
+        order by time desc
     </select>
 
 

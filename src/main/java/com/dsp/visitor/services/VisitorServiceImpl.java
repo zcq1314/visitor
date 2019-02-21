@@ -36,7 +36,7 @@ public class VisitorServiceImpl {
         return visitorDao.update(visitor);
     }
 
-    @Describe(opModule = "访客模块",opType = 1,opContent = "删除的访客编号为：【#{#id}】")
+    @Describe(opModule = "访客模块",opType = 3,opContent = "删除的访客编号为：【#{#id}】")
     public Integer delete(Integer id) {
         return visitorDao.delete(id);
     }

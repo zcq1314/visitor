@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-
 @Controller
 @RequestMapping(value = "/visitor")
 public class VisitorController {
@@ -44,6 +43,38 @@ public class VisitorController {
                        HttpServletResponse response)throws Exception{
 
         PageHelper.startPage(page,limit);
+        List<Visitor> visitors = visitorService.list(visitor);
+        PageInfo<Visitor> pageInfo = new PageInfo<>(visitors);
+
+        Result result = new Result();
+
+        if(pageInfo.getTotal() > 0){
+            result.setSuccess("获取成功");
+            result.setData(pageInfo.getList());
+            result.setCount((int) pageInfo.getTotal());
+        }else{
+            result.setSuccess("暂无数据");
+            result.setCount(0);
+        }
+
+        return result;
+    }
+
+    /**
+     * 查询今天所有访客信息
+     * @param page
+     * @param limit
+     * @param visitor
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/todaylist")
+    @ResponseBody
+    public Result todaylist(Integer page, Integer limit , Visitor visitor,
+                       HttpServletResponse response)throws Exception{
+
+        PageHelper.startPage(page,limit);
+        visitor.setTime(new Date());
         List<Visitor> visitors = visitorService.list(visitor);
         PageInfo<Visitor> pageInfo = new PageInfo<>(visitors);
 
